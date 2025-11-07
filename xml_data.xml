@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestData>
+    <FormTests>
+
+        <TestCase testCaseID="TC001">
+            <Name>ramesh kanpuriya</Name>
+            <Email>ramu@example.com</Email>
+            <Password>Ramu@123</Password>
+            <ExpectedResult>Valid</ExpectedResult>
+        </TestCase>
+
+        <TestCase testCaseID="TC002">
+            <Name></Name>
+            <Email>invalidemail.com</Email>
+            <Password>123</Password>
+            <ExpectedResult>Invalid</ExpectedResult>
+        </TestCase>
+
+        <TestCase testCaseID="TC003">
+            <Name>Pankaj mahato</Name>
+            <Email>mahato@example.com</Email>
+            <Password>Pankaj123</Password>
+            <ExpectedResult>Valid</ExpectedResult>
+        </TestCase>
+
+        <TestCase testCaseID="TC004">
+            <Name>12345</Name>
+            <Email></Email>
+            <Password></Password>
+            <ExpectedResult>Invalid</ExpectedResult>
+        </TestCase>
+
+    </FormTests>
+</TestData>
