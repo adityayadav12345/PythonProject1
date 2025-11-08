@@ -29,7 +29,9 @@ def test_search_laptop(setup_browser):
     search_box.send_keys("laptop")
 
     # Click search button
-    search_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="gh-search-btn"]/span')))
+    search_button = wait.until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="gh-search-btn"]/span'))
+    )
     search_button.click()
     print("\n✅ Search initiated for 'laptop'")
     time.sleep(5)  # Let the search results load
@@ -37,25 +39,18 @@ def test_search_laptop(setup_browser):
 
 def open_graphics_processing_dropdown(driver):
     """Opens the 'Graphics Processing Type' dropdown on eBay using aria-expanded attribute."""
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import time
-
     wait = WebDriverWait(driver, 20)
 
-    # XPath for the 'Graphics Processing Type' dropdown
     dropdown_xpath = "//h3[contains(., 'Graphics Processing Type')]/div/div"
 
     try:
-        # Wait until the dropdown element is present
-        dropdown_element = wait.until(EC.presence_of_element_located((By.XPATH, dropdown_xpath)))
+        dropdown_element = wait.until(
+            EC.presence_of_element_located((By.XPATH, dropdown_xpath))
+        )
 
-        # Scroll it into view
         driver.execute_script("arguments[0].scrollIntoView(true);", dropdown_element)
         time.sleep(2)
 
-        # Click to expand dropdown
         driver.execute_script("arguments[0].click();", dropdown_element)
         print("✅ Opened 'Graphics Processing Type' dropdown successfully.")
     except Exception as e:
@@ -64,32 +59,32 @@ def open_graphics_processing_dropdown(driver):
     time.sleep(2)
 
 
-
-
-def click_dedicated_graphics_radio(driver):
-
+def click_dedicated_graphics_checkbox(driver):
+    """Clicks the 'Dedicated Graphics' checkbox in eBay filters."""
     wait = WebDriverWait(driver, 20)
-
     try:
-        # Wait for the 'Dedicated Graphics' radio button to be clickable
-        dedicated_graphics = wait.until(
-            EC.element_to_be_clickable((By.NAME, "Dedicated Graphics"))
+        # Use XPath with aria-label to locate the checkbox
+        dedicated_checkbox = wait.until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//input[@type='checkbox' and @aria-label='Dedicated Graphics']")
+            )
         )
 
-        # Click using JavaScript for reliability
-        driver.execute_script("arguments[0].click();", dedicated_graphics)
-        print("✅ Clicked 'Dedicated Graphics' radio button successfully.")
+        # Click using JavaScript since it’s not a visible clickable element
+        driver.execute_script("arguments[0].click();", dedicated_checkbox)
+        print("✅ Successfully clicked 'Dedicated Graphics' checkbox.")
     except Exception as e:
-        print(f"⚠️ Could not click 'Dedicated Graphics' radio button: {e}")
+        print(f"⚠️ Could not click 'Dedicated Graphics' checkbox: {e}")
 
-    # Small wait to view results
     time.sleep(3)
 
 
-
-
-def test_apply_hp_filter(setup_browser):
-    """Open brand dropdown and select HP filter."""
+def test_complete_graphics_filter_workflow(setup_browser):
     driver = setup_browser
+    print("\n🚀 Starting complete eBay workflow...\n")
+
+    test_search_laptop(driver)
     open_graphics_processing_dropdown(driver)
-    click_dedicated_graphics_radio(driver)
+    click_dedicated_graphics_checkbox(driver)
+
+    print("\n✅ Workflow completed successfully!\n")

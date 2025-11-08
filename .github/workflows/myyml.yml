@@ -1,61 +1,31 @@
-name: Simple Title Verification 
+name: Simple Title Verification
 
- 
+on:
+  push:
+    branches: [ main, development ]
+  workflow_dispatch:
 
-on: 
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-  push: 
+    steps:
+    - uses: actions/checkout@v4
 
-    branches: [ main, development ] 
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-  workflow_dispatch: 
+    - name: Install packages
+      run: |
+        pip install --upgrade pip
+        pip install selenium webdriver-manager pytest
 
- 
+    - name: Install Chrome
+      run: |
+        sudo apt update
+        sudo apt install -y google-chrome-stable
 
-jobs: 
-
-  test: 
-
-    runs-on: ubuntu-latest 
-
-     
-
-    steps: 
-
-    - uses: actions/checkout@v4 
-
-     
-
-    - name: Setup Python 
-
-      uses: actions/setup-python@v4 
-
-      with: 
-
-        python-version: '3.11' 
-
-         
-
-    - name: Install packages 
-
-      run: | 
-
-        pip install --upgrade pip 
-
-        pip install selenium webdriver-manager 
-
-         
-
-    - name: Install Chrome 
-
-      run: | 
-
-        sudo apt update 
-
-        sudo apt install -y google-chrome-stable 
-
-         
-
-    - name: Run verification script 
-
-      run: python lab_qs1.py
+    - name: Run verification script
+      run: pytest -v cart.py
