@@ -10,22 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Setup Python
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    - name: Install packages
+    - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install selenium webdriver-manager pytest
 
-    - name: Install Chrome
+    - name: Install Google Chrome
       run: |
-        sudo apt update
-        sudo apt install -y google-chrome-stable
+        sudo apt-get update
+        sudo apt-get install -y wget gnupg
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
 
-    - name: Run verification script
+    - name: Verify Chrome installation
+      run: google-chrome --version
+
+    - name: Run Selenium tests with Pytest
       run: pytest -v cart.py
